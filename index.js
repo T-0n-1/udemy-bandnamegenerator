@@ -1,23 +1,19 @@
-import { render } from "ejs";
 import express from "express";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import bodyParser from "body-parser";
 
 const app = express();
 const port = 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.render(__dirname + "/views/index.ejs");
 });
 
 app.post("/submit", (req, res) => {
-  let data = createDataObject(adj, noun);
-  res.render(__dirname + "/views/index.ejs", data);
+  res.render(__dirname + "/views/index.ejs", createDataObject(adj, noun));
 });
 
 app.listen(port, () => {
@@ -28,14 +24,10 @@ function createDataObject(...arrays) {
   const result = {};
   const keys = ["adj", "noun"];
   arrays.forEach((array, index) => {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    const randomElement = array[randomIndex];
-    const key = keys[index];
-    result[key] = randomElement;
+    result[keys[index]] = array[Math.floor(Math.random() * array.length)];
   });
   return result;
 }
-
 
 const adj = [
   "abandoned",
